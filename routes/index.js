@@ -3,7 +3,7 @@ var router = express.Router();
 const {
   addTask,
   getAllTasks,
-  removeTaskById,
+  deleteTaskById,
 } = require('../controllers/tasks');
 
 /* List all tasks. */
@@ -13,6 +13,6 @@ router.get('/tasks', getAllTasks);
 router.post('/tasks', addTask);
 
 /* Delete a task by ID. */
-router.delete('/tasks/:id', removeTaskById);
+router.delete('/tasks/:id', deleteTaskById);
 
 module.exports = router;

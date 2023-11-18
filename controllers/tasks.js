@@ -1,18 +1,18 @@
-let tasks = [
-  {
-    id: 1,
-    title: 'Home test',
-    description: 'long description',
-  },
-];
+const { v4: uuid } = require('uuid');
 
+let tasksData = [];
+const errorMesages = {
+  404: 'Task not found.',
+  400: 'Bad request, please include a valid title.',
+  500: 'Something went wrong.',
+};
 // TODO: Handle errors more accurately
 // Returns all stored tasks.
-const getAllTasks = async (req, res) => {
+const getAllTasks = async (_, res) => {
   try {
-    res.status(200).json(tasks);
+    res.status(200).json(tasksData);
   } catch (e) {
-    res.status(500).json({ message: 'Something went wrong' });
+    res.status(500).json({ message: errorMesages[500] });
   }
 };
 
@@ -20,30 +20,37 @@ const getAllTasks = async (req, res) => {
 const addTask = async (req, res) => {
   try {
     const { title, description } = req.body;
-    // TODO:Validate if task already exists and no empty title
+    if (!newTaskIsValid(title)) res.sendStatus(400).errorMesages[400];
     const newTask = {
       title,
       description,
-      id: 2, // TODO: Add a unique id
+      id: uuid(),
     };
-    tasks.push(newTask);
-    res.status(201).json(tasks);
+    tasksData.push(newTask);
+    res.status(201).json(tasksData);
   } catch (e) {
-    res.status(500).json({ error: e, message: 'Something went wrong' });
+    res.status(500).json({ error: e, message: errorMesages[500] });
   }
 };
 
 // Remove task by id.
-const removeTaskById = async (req, res) => {
+const deleteTaskById = async (req, res) => {
   try {
     const { id } = req.params;
-    const toDeleteId = Number(id);
-    // TODO: Validate that the task exists
-    tasks = tasks.filter((task) => task.id !== id);
-    res.status(200).json(tasks);
+    if (!taskExists(tasksData, id)) res.sendStatus(404);
+    tasksData = tasksData.filter((task) => task.id !== id);
+    res.status(204).json(tasksData);
   } catch (e) {
-    res.status(500).json({ message: 'Something went wrong' });
+    res.status(500).json({ message: errorMesages[500] });
   }
 };
 
-module.exports = { addTask, getAllTasks, removeTaskById };
+const taskExists = (tasks, id) => {
+  return tasks.find((task) => task.id == id);
+};
+
+const newTaskIsValid = (title) => {
+  return title.length > 0;
+};
+
+module.exports = { addTask, getAllTasks, deleteTaskById };
