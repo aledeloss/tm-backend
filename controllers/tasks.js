@@ -37,7 +37,8 @@ const addTask = async (req, res) => {
 const deleteTaskById = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!taskExists(tasksData, id)) res.sendStatus(404);
+    if (!taskExists(tasksData, id))
+      res.status(404).json({ message: errorMesages[404] });
     tasksData = tasksData.filter((task) => task.id !== id);
     res.status(204).json(tasksData);
   } catch (e) {
