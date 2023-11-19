@@ -26,6 +26,7 @@ For simplicity and time reasons, I tried to choose the simplest solutions availa
 The following issues should be fixed:
 
 - When receiving a request the throws a 404 status code, an error 'Cannot set headers after they are sent to the client on 404' is thrown. This should be analysed and fixed.
+- Errors should be handled more accurately and documented. We are sending status 500 without properly evaluating each case scenario.
 
 ## Nice to have
 
@@ -34,3 +35,6 @@ If I had more time, besides solving the known issues mentioned above, I would:
 - Add automated tests so we make sure that the frontend works and we don't break it in the future. Particularly, to:
   - Check that each endpoint return the expected status code and data structure for each case
   - Check that validation helper methods work properly.
+- Deploy the project.
+
+Thanks for readind!
